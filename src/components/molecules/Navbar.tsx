@@ -13,7 +13,7 @@ const navLinks = [
 
 export default function Navbar() {
  return (
-  <header className="py-4 md:py-8 flex items-center">
+  <header className="py-4 md:py-12">
    <div id="nav-container" className="w-full flex items-center justify-between">
     <nav className="flex items-center gap-24">
      <Image
@@ -45,6 +45,8 @@ export default function Navbar() {
      </UserMenu>
     </div>
    </div>
+
+   <hr className="w-full mt-8 font-bold h-2 text-secondary" />
   </header>
  );
 }
