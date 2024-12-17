@@ -10,9 +10,9 @@ export default {
   extend: {
    colors: {
     background: "var(--background)",
-    foreground: "var(--foreground)",
-    primary: "var(--ecommerce-orange)",
-    secondary: "var(--very-dark-blue)",
+    foreground: "hsl(var(--foreground))",
+    primary: "hsl(var(--ecommerce-orange))",
+    secondary: "hsl(var(--ecommerce-pale-orange))",
    },
   },
  },

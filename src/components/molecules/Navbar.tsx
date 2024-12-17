@@ -15,12 +15,12 @@ export default function Navbar() {
  return (
   <header className="py-4 md:py-12">
    <div id="nav-container" className="w-full flex items-center justify-between">
-    <nav className="flex items-center gap-24">
+    <nav className="flex items-center gap-16">
      <Image
       src="/images/logo.svg"
       alt="sneakers logo"
-      width={120}
-      height={120}
+      width={160}
+      height={160}
      />
 
      <ul className="flex items-center gap-12">
