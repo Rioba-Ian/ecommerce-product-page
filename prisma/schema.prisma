@@ -12,3 +12,120 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  email          String  @unique
+  name           String?
+  hashedPassword String?
+  picture        String?
+
+  Cart      Cart[]
+  Order     Order[]
+  Payment   Payment[]
+  createdAt DateTime  @default(now())
+
+  session Session[]
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  expiresAt DateTime
+}
+
+model Category {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  products Product[]
+}
+
+model Product {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  price       Float
+  oldPrice    Float       @default(0)
+  in_stock    Int         @default(0)
+  discount    Float       @default(0)
+  description String?
+  image       String?
+  CartItem    CartItem[]
+  Category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?     @db.ObjectId
+  OrderItem   OrderItem[]
+}
+
+model Cart {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  user_id  String
+  created  DateTime   @default(now())
+  CartItem CartItem[]
+  User     User?      @relation(fields: [userId], references: [id])
+  userId   String?    @db.ObjectId
+}
+
+model CartItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    String  @db.ObjectId
+  Order     Order?  @relation(fields: [orderId], references: [id])
+  orderId   String? @db.ObjectId
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  user_id   String
+  status    OrderStatus
+  CartItem  CartItem[]
+  User      User?       @relation(fields: [userId], references: [id])
+  userId    String?     @db.ObjectId
+  created   DateTime    @default(now())
+  updated   DateTime    @updatedAt
+  OrderItem OrderItem[]
+  Payment   Payment[]
+
+  @@index([user_id])
+}
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String  @db.ObjectId
+  orderId   String  @db.ObjectId
+
+  @@index([orderId])
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Payment {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  amount          Float
+  currency        String
+  orderId         String        @db.ObjectId
+  Order           Order         @relation(fields: [orderId], references: [id])
+  userId          String        @db.ObjectId
+  User            User          @relation(fields: [userId], references: [id])
+  stripePaymentId String        @unique
+  stripeSessionId String        @unique
+  paymentMethod   PaymentStatus
+  receiptUrl      String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
