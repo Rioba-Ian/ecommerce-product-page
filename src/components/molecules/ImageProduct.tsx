@@ -9,6 +9,7 @@ export default function ImageProduct() {
     alt="product image"
     width={800}
     height={600}
+    className="rounded-md"
    />
   </div>
  );
