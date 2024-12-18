@@ -6,7 +6,7 @@ const buttonVariants = cva("", {
  variants: {
   variant: {
    primary: "text-foreground/80 px-12 py-4 bg-primaryEcommerce rounded-md",
-   default: "grid place-items-center bg-white text-dark px-8 py-2 my-2.5",
+   default: "",
   },
  },
  defaultVariants: {

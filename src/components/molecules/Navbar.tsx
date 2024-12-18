@@ -3,6 +3,14 @@ import Link from "next/link";
 import React from "react";
 import { UserMenu } from "./UserMenu";
 import { MenuIcon, X } from "lucide-react";
+import {
+ DropdownMenu,
+ DropdownMenuContent,
+ DropdownMenuItem,
+ DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import SignOutButton from "./SignOutButton";
+import { getUser } from "@/lib/lucia";
 
 const navLinks = [
  { to: "#", link: "Collections" },
@@ -12,7 +20,8 @@ const navLinks = [
  { to: "#", link: "Contact" },
 ];
 
-export default function Navbar() {
+export default async function Navbar() {
+ const user = await getUser();
  return (
   <header className="py-4 md:py-12 relative">
    <div id="nav-container" className="w-full flex items-center justify-between">
@@ -71,7 +80,17 @@ export default function Navbar() {
      />
 
      <UserMenu>
-      <UserMenu.Icon />
+      <DropdownMenu>
+       <DropdownMenuTrigger asChild>
+        <UserMenu.Icon imageUrl={user?.picture ?? undefined} />
+       </DropdownMenuTrigger>
+       <DropdownMenuContent className="bg-primaryEcommerce">
+        <DropdownMenuItem>{user && <SignOutButton />}</DropdownMenuItem>
+        <DropdownMenuItem>
+         {!user && <Link href="/signin">Sign In</Link>}
+        </DropdownMenuItem>
+       </DropdownMenuContent>
+      </DropdownMenu>
      </UserMenu>
     </div>
    </div>

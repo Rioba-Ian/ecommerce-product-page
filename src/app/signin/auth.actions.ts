@@ -2,6 +2,7 @@
 import { googleOAuthClient } from "@/lib/google-oauth";
 import { lucia } from "@/lib/lucia";
 import { generateCodeVerifier, generateState } from "arctic";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -40,5 +41,6 @@ export const logOut = async () => {
   sessionCookie.value,
   sessionCookie.attributes
  );
+ revalidatePath("/");
  return redirect("/");
 };

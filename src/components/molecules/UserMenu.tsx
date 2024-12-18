@@ -9,9 +9,23 @@ export function UserMenu(props: UserMenuProps) {
  return <div className="">{props.children}</div>;
 }
 
-const Icon = () => {
- const defaultImage = "/images/image-avatar.png";
- return <Image src={defaultImage} height={40} width={40} alt="user avatar" />;
+interface UserIconProps {
+ imageUrl: string | undefined;
+}
+
+const Icon = (props: UserIconProps) => {
+ const defaultImage =
+  "https://rioba-dev.sirv.com/sneakers-ecommerce/image-avatar.png";
+ const { imageUrl } = props;
+ return (
+  <Image
+   src={imageUrl ?? defaultImage}
+   height={40}
+   width={40}
+   className="rounded-full"
+   alt="user avatar"
+  />
+ );
 };
 
 UserMenu.Icon = Icon;

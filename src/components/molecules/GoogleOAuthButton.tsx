@@ -18,7 +18,7 @@ const GoogleOAuthButton = () => {
      toast.error(res.error);
     }
    }}
-   className="flex items-center rounded-md justify-center bg-primaryEcommerce"
+   className="py-2 px-6 flex items-center rounded-md justify-center bg-primaryEcommerce"
   >
    <RiGoogleFill className="mr-2 text-foreground/80" />
    Continue with Google
