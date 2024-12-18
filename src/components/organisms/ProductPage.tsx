@@ -27,7 +27,7 @@ export default function ProductPage() {
      weather can offer.
     </p>
 
-    <div className="py-4 space-y-2 flex items-center justify-between md:flex-col">
+    <div className="py-4 space-y-2 flex items-center justify-between md:flex-col md:items-start">
      <div className="inline-flex items-center gap-2">
       <h2 className="text-2xl md:text-3xl font-semibold">$125.00 </h2>
       <span className="px-3 py-1 bg-foreground/80 md:text-xl rounded-md font-semibold text-white">

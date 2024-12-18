@@ -24,6 +24,7 @@ model User {
   Order     Order[]
   Payment   Payment[]
   createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   session Session[]
 }
@@ -36,9 +37,11 @@ model Session {
 }
 
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  products Product[]
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Product {
@@ -47,22 +50,25 @@ model Product {
   price       Float
   oldPrice    Float       @default(0)
   in_stock    Int         @default(0)
-  discount    Float       @default(0)
   description String?
-  image       String?
+  image       String[]
   CartItem    CartItem[]
   Category    Category?   @relation(fields: [categoryId], references: [id])
   categoryId  String?     @db.ObjectId
   OrderItem   OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Cart {
-  id       String     @id @default(auto()) @map("_id") @db.ObjectId
-  user_id  String
-  created  DateTime   @default(now())
-  CartItem CartItem[]
-  User     User?      @relation(fields: [userId], references: [id])
-  userId   String?    @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  user_id   String
+  CartItem  CartItem[]
+  User      User?      @relation(fields: [userId], references: [id])
+  userId    String?    @db.ObjectId
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model CartItem {
@@ -89,8 +95,8 @@ model Order {
   CartItem  CartItem[]
   User      User?       @relation(fields: [userId], references: [id])
   userId    String?     @db.ObjectId
-  created   DateTime    @default(now())
-  updated   DateTime    @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
   Payment   Payment[]
 
