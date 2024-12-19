@@ -3,6 +3,7 @@
 import { getUser } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export async function addToCart(
  product: Product,
@@ -20,6 +21,22 @@ export async function addToCart(
 
  //  create a cart item: productId, quantity,
  const result = await prisma.$transaction(async (tx) => {
+  //  check if the cartItem exists
+  const existingCartItem = await prisma.cartItem.findFirst({
+   where: {
+    productId: product.id,
+   },
+  });
+
+  if (existingCartItem) {
+   return tx.cartItem.update({
+    where: { id: existingCartItem.id },
+    data: {
+     quantity: existingCartItem.quantity + parseInt(cartQuantity),
+    },
+   });
+  }
+
   const cart = await tx.cart.upsert({
    where: { userId: user.id },
    create: { userId: user.id },
@@ -33,5 +50,13 @@ export async function addToCart(
     cartId: cart.id,
    },
   });
+
+  return { cart, cartItem };
  });
+
+ console.log(result, "result of cart item");
+
+ revalidatePath("/");
 }
+
+// before we add to cart we also need to check if that product already exists in the cart and let us not create another cart item

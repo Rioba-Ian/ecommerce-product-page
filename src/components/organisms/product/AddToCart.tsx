@@ -19,7 +19,9 @@ function AddToCart(props: AddToCartProps) {
  const [cartQuantity, setCartQuantity] = useState<number>(0);
  return (
   <form
-   action={cartProductWithId}
+   action={async (formdata) => {
+    cartProductWithId(formdata);
+   }}
    className="flex flex-col md:flex-row items-center gap-4"
   >
    <div className="flex items-center gap-1 basis-1/3">

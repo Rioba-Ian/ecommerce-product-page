@@ -11,6 +11,8 @@ import {
 } from "../ui/dropdown-menu";
 import SignOutButton from "./SignOutButton";
 import { getUser } from "@/lib/lucia";
+import { prisma } from "@/lib/prisma";
+import CartStatusIcon from "./CartStatusIcon";
 
 const navLinks = [
  { to: "#", link: "Collections" },
@@ -22,6 +24,7 @@ const navLinks = [
 
 export default async function Navbar() {
  const user = await getUser();
+ const cartItemsCount = await prisma.cartItem.count();
  return (
   <header className="py-4 md:py-12 relative">
    <div id="nav-container" className="w-full flex items-center justify-between">
@@ -72,12 +75,7 @@ export default async function Navbar() {
     </nav>
 
     <div id="user-actions" className="flex items-center gap-4 sm:gap-16">
-     <Image
-      src="/images/icon-cart.svg"
-      alt="cart icon logo"
-      width={24}
-      height={24}
-     />
+     <CartStatusIcon count={cartItemsCount} />
 
      <UserMenu>
       <DropdownMenu>
