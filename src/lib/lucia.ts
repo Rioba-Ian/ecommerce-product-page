@@ -42,6 +42,7 @@ export const getUser = async () => {
    id: user?.id,
   },
   select: {
+   id: true,
    name: true,
    email: true,
    picture: true,
@@ -50,3 +51,5 @@ export const getUser = async () => {
 
  return dbUser;
 };
+
+export type TUser = Awaited<typeof getUser>;

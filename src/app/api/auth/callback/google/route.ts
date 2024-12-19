@@ -59,7 +59,6 @@ export async function GET(req: NextRequest) {
 
  //  if email exists, create a cookie for them and sign them in
  // if email doesn't exist create a new user then create a cookie to sign them in
-
  const existingUser = await prisma.user.findUnique({
   where: {
    email: googleData.email,
@@ -78,8 +77,6 @@ export async function GET(req: NextRequest) {
   });
   userId = newUser.id;
  }
-
- console.log(userId, "userId");
 
  const session = await lucia.createSession(userId, {});
  const sessionCookie = await lucia.createSessionCookie(session.id);
