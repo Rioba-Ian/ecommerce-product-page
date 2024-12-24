@@ -10,11 +10,9 @@ function CartStatusIcon({ count }: { count: number }) {
     width={24}
     height={24}
    />
-   {count && count > 0 && (
-    <p className="absolute text-primaryEcommerce -top-4 left-6 font-bold">
-     {count}
-    </p>
-   )}
+   <p className="absolute text-primaryEcommerce -top-4 left-6 font-bold">
+    {count > 0 ? count : ""}
+   </p>
   </div>
  );
 }

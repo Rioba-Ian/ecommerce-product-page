@@ -17,11 +17,12 @@ function AddToCart(props: AddToCartProps) {
  const { product, user } = props;
  const cartProductWithId = addToCart.bind(null, product, user);
  const [cartQuantity, setCartQuantity] = useState<number>(0);
+ const formAction = async (formData: FormData) => {
+  cartProductWithId(formData);
+ };
  return (
   <form
-   action={async (formdata) => {
-    cartProductWithId(formdata);
-   }}
+   action={formAction}
    className="flex flex-col md:flex-row items-center gap-4"
   >
    <div className="flex items-center gap-1 basis-1/3">
