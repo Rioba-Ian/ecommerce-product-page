@@ -29,7 +29,7 @@ function Lighbox({ images }: LighboxProps) {
 
  const handleScroll = (direction: "left" | "right") => {
   if (scrollLeftRef.current === null) return;
-  if (images.length === 0 && !selectedImage) return;
+  if (images.length === 0 || !selectedImage) return;
   const indexOfSelectedImage = images.indexOf(selectedImage);
 
   console.log(indexOfSelectedImage, "indexOfSelectedImage");
@@ -89,7 +89,7 @@ function Lighbox({ images }: LighboxProps) {
       <VisuallyHidden asChild>Product Image</VisuallyHidden>
      </DialogTitle>
      <div className="flex flex-col">
-      <Carousel opts={{ startIndex: images.indexOf(selectedImage) }}>
+      <Carousel opts={{ startIndex: images.indexOf(selectedImage || "") }}>
        <CarouselContent>
         {images?.map((image, index) => (
          <CarouselItem key={index}>

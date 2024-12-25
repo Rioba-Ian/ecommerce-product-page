@@ -13,7 +13,7 @@ export default async function ProductPage() {
   productsData[0]?.oldPrice;
 
  return (
-  <main className=" grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 place-items-center  flex-1">
+  <main className="py-4 md:py-8 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 place-items-center  flex-1">
    <section>
     <ImageProduct images={productsData[0].image || []} />
    </section>

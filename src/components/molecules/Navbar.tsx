@@ -12,7 +12,7 @@ import {
 import SignOutButton from "./SignOutButton";
 import { getUser } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
-import CartStatusIcon from "./CartStatusIcon";
+import CartStatusIcon from "./cart/CartStatusIcon";
 
 const navLinks = [
  { to: "#", link: "Collections" },
@@ -24,7 +24,12 @@ const navLinks = [
 
 export default async function Navbar() {
  const user = await getUser();
- const cartItemsCount = await prisma.cartItem.count();
+ const cartItems = await prisma.cartItem.findMany({
+  include: {
+   product: true,
+  },
+ });
+
  return (
   <header className="py-4 md:py-12 relative">
    <div id="nav-container" className="w-full flex items-center justify-between">
@@ -75,7 +80,7 @@ export default async function Navbar() {
     </nav>
 
     <div id="user-actions" className="flex items-center gap-4 sm:gap-16">
-     <CartStatusIcon count={cartItemsCount} />
+     <CartStatusIcon cartItems={cartItems} />
 
      <UserMenu>
       <DropdownMenu>
