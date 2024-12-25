@@ -1,5 +1,12 @@
 "use client";
 import {
+ Carousel,
+ CarouselContent,
+ CarouselItem,
+ CarouselNext,
+ CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
  Dialog,
  DialogContent,
  DialogTitle,
@@ -22,11 +29,32 @@ function Lighbox({ images }: LighboxProps) {
 
  const handleScroll = (direction: "left" | "right") => {
   if (scrollLeftRef.current === null) return;
+  if (images.length === 0 && !selectedImage) return;
+  const indexOfSelectedImage = images.indexOf(selectedImage);
+
+  console.log(indexOfSelectedImage, "indexOfSelectedImage");
+  console.log(images.length, "images.length");
+
+  if (indexOfSelectedImage < 0) {
+   // restart the index
+   setSelectedImage(images[images.length - 1]);
+   return;
+  }
 
   if (direction === "left") {
    scrollLeftRef.current.scrollLeft -= 200;
+   setSelectedImage(
+    images[indexOfSelectedImage === 0 ? 0 : indexOfSelectedImage - 1]
+   );
   } else {
    scrollLeftRef.current.scrollLeft += 200;
+   setSelectedImage(
+    images[
+     indexOfSelectedImage === images.length - 1
+      ? images.length - 1
+      : indexOfSelectedImage + 1
+    ]
+   );
   }
  };
 
@@ -56,17 +84,48 @@ function Lighbox({ images }: LighboxProps) {
       className="rounded-md"
      />
     </DialogTrigger>
-    <DialogContent onToggle={onToggle}>
+    <DialogContent onToggle={onToggle} className="max-w-3xl border-none">
      <DialogTitle>
       <VisuallyHidden asChild>Product Image</VisuallyHidden>
      </DialogTitle>
-     <Image
-      src={selectedImage ?? "/images/image-product-1.jpg"}
-      alt="product image"
-      width={1200}
-      height={800}
-      className="rounded-md"
-     />
+     <div className="flex flex-col">
+      <Carousel opts={{ startIndex: images.indexOf(selectedImage) }}>
+       <CarouselContent>
+        {images?.map((image, index) => (
+         <CarouselItem key={index}>
+          <article className="flex aspect-square items-center justify-center p-6">
+           <Image
+            src={image}
+            alt="product image"
+            width={800}
+            height={800}
+            className="rounded-md"
+           />
+          </article>
+         </CarouselItem>
+        ))}
+       </CarouselContent>
+       <CarouselPrevious className="text-white" />
+       <CarouselNext className="text-white" />
+      </Carousel>
+      <div className="flex justify-center gap-4">
+       {images?.map((image, index) => (
+        <Image
+         key={index}
+         src={image}
+         alt="product thumbnail"
+         width={80}
+         height={80}
+         className={`rounded-md cursor-pointer transition-all ${
+          selectedImage === image
+           ? "border-2 border-primaryEcommerce opacity-50"
+           : "hover:opacity-70"
+         }`}
+         onClick={() => setSelectedImage(image)}
+        />
+       ))}
+      </div>
+     </div>
     </DialogContent>
    </Dialog>
 
