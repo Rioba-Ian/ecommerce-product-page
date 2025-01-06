@@ -59,4 +59,23 @@ export async function addToCart(
  revalidatePath("/");
 }
 
-// before we add to cart we also need to check if that product already exists in the cart and let us not create another cart item
+export const increaseProductQuantityInCart = async (cartItemId: string) => {
+ console.log("increaseProductQuantityInCart", cartItemId);
+
+ if (!cartItemId) {
+  return {
+   errors: "Missing required data.",
+  };
+ }
+
+ const cartItem = prisma.cartItem.update({
+  where: { id: cartItemId },
+  data: {
+   quantity: {
+    increment: 1,
+   },
+  },
+ });
+
+ return cartItem;
+};

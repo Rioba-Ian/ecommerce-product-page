@@ -11,3 +11,13 @@ export const cartWithProducts = Prisma.validator<Prisma.Cart$CartItemArgs>()({
   product: true,
  },
 });
+
+export const formatPrice = (price: number) => {
+ return new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 2,
+  minimumFractionDigits: 2,
+  trailingZeroDisplay: "auto",
+ }).format(price);
+};
