@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Kumbh_Sans } from "next/font/google";
+import Navbar from "@/components/molecules/Navbar";
 
 const kumbhSans = Kumbh_Sans({
  subsets: ["latin"],
@@ -20,7 +21,16 @@ export default function RootLayout({
 }>) {
  return (
   <html lang="en" suppressHydrationWarning>
-   <body className={`${kumbhSans.className}`}>{children}</body>
+   <body className={`${kumbhSans.className}`}>
+    <div
+     className="max-w-7xl w-[90%] mx-auto flex flex-col min-h-screen"
+     id="app-container"
+    >
+     <Navbar />
+
+     {children}
+    </div>
+   </body>
   </html>
  );
 }

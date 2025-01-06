@@ -21,3 +21,18 @@ export const formatPrice = (price: number) => {
   trailingZeroDisplay: "auto",
  }).format(price);
 };
+
+export const formatPercentageDiscount = (
+ newPrice: number,
+ oldPrice: number
+) => {
+ const percentDiscount = (oldPrice - newPrice) / oldPrice;
+ return formatPercent(percentDiscount);
+};
+
+export const formatPercent = (value: number) => {
+ return new Intl.NumberFormat("en-US", {
+  style: "percent",
+  maximumFractionDigits: 0,
+ }).format(value);
+};

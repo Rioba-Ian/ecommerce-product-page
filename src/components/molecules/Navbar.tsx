@@ -63,12 +63,14 @@ export default async function Navbar() {
       </div>
      </div>
 
-     <Image
-      src="/images/logo.svg"
-      alt="sneakers logo"
-      width={160}
-      height={160}
-     />
+     <Link href={"/"}>
+      <Image
+       src="/images/logo.svg"
+       alt="sneakers logo"
+       width={160}
+       height={160}
+      />
+     </Link>
 
      <ul className="hidden lg:flex items-center gap-12">
       {navLinks.map((link) => (

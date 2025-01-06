@@ -19,6 +19,8 @@ import {
  increaseProductQuantityInCart,
 } from "@/app/actions";
 import { CartItem } from "./CartContent";
+import Link from "next/link";
+import { useDisclosure } from "@/hooks/use-disclosure";
 
 interface CartStatusIconProps {
  cartItems: TCartWithProductsIncludes[];
@@ -27,6 +29,7 @@ interface CartStatusIconProps {
 function CartStatusIcon({ cartItems }: CartStatusIconProps) {
  const [optimisticCartItems, setOptimisticCartItems] = useOptimistic(cartItems);
  const count = optimisticCartItems.length;
+ const { isOpen, onToggle } = useDisclosure();
 
  const totalPrice = optimisticCartItems.reduce(
   (acc, item) => acc + Number(item.quantity) * Number(item.product.price),
@@ -82,9 +85,9 @@ function CartStatusIcon({ cartItems }: CartStatusIconProps) {
 
  return (
   <div className="flex relative">
-   <Drawer direction="right">
+   <Drawer direction="right" open={isOpen}>
     <DrawerTrigger asChild>
-     <div className="cursor-pointer">
+     <div className="cursor-pointer" onClick={onToggle}>
       <Image
        src="/images/icon-cart.svg"
        alt="cart icon logo"
@@ -118,8 +121,13 @@ function CartStatusIcon({ cartItems }: CartStatusIconProps) {
       </div>
       <DrawerFooter>
        Total:{formatPrice(totalPrice)}
-       <Button className="bg-primaryEcommerce hover:bg-secondaryEcommerce hover:text-foreground">
-        Proceed to Checkout
+       <Button
+        asChild
+        className="bg-primaryEcommerce hover:bg-secondaryEcommerce hover:text-foreground"
+       >
+        <Link href={"/checkout"} onClick={onToggle}>
+         Proceed to Checkout
+        </Link>
        </Button>
        <DrawerClose asChild>
         <Button variant="outline">Cancel</Button>

@@ -3,14 +3,11 @@ import ImageProduct from "../molecules/ImageProduct";
 import { prisma } from "@/lib/prisma";
 import AddToCart from "./product/AddToCart";
 import { getUser } from "@/lib/lucia";
+import { formatPercentageDiscount, formatPrice } from "@/utils";
 
 export default async function ProductPage() {
  const productsData = await prisma.product.findMany();
  const user = await getUser();
-
- const percentageDiscount =
-  (productsData[0]?.oldPrice - productsData[0]?.price) /
-  productsData[0]?.oldPrice;
 
  return (
   <main className="py-4 md:py-8 grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-8 place-items-center  flex-1">
@@ -40,25 +37,17 @@ export default async function ProductPage() {
     <div className="py-4 space-y-2 flex items-center justify-between md:flex-col md:items-start">
      <div className="inline-flex items-center gap-2">
       <h2 className="text-2xl md:text-3xl font-semibold">
-       {Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-       }).format(productsData[0]?.price ?? 125)}
+       {formatPrice(productsData[0]?.price ?? 125)}
       </h2>
       <span className="px-3 py-1 bg-foreground/80 md:text-xl rounded-md font-semibold text-white">
-       {Intl.NumberFormat("en-US", {
-        style: "percent",
-        maximumFractionDigits: 0,
-       }).format(percentageDiscount)}
+       {formatPercentageDiscount(
+        productsData[0]?.price ?? 125,
+        productsData[0]?.oldPrice ?? 250
+       )}
       </span>
      </div>
      <p className="text-foreground/50 font-semibold">
-      <s>
-       {Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-       }).format(productsData[0]?.oldPrice ?? 250)}
-      </s>
+      <s>{formatPrice(productsData[0]?.oldPrice ?? 250)}</s>
      </p>
     </div>
 
