@@ -14,7 +14,10 @@ import {
 import { Button } from "../../ui/button";
 import { TCartWithProductsIncludes } from "../../../../global-types";
 import { formatPrice } from "@/utils";
-import { increaseProductQuantityInCart } from "@/app/actions";
+import {
+ decreaseProductQuantityInCart,
+ increaseProductQuantityInCart,
+} from "@/app/actions";
 import { CartItem } from "./CartContent";
 
 interface CartStatusIconProps {
@@ -38,6 +41,30 @@ function CartStatusIcon({ cartItems }: CartStatusIconProps) {
     )
    );
    const updatedItem = await increaseProductQuantityInCart(itemId);
+
+   if ("errors" in updatedItem) {
+    return;
+   }
+
+   setOptimisticCartItems((prev) =>
+    prev.map((item) =>
+     item.id === updatedItem.id
+      ? { ...item, quantity: updatedItem.quantity }
+      : item
+    )
+   );
+  });
+ };
+
+ const handleDecreaseQuantity = (itemId: string) => {
+  startTransition(async () => {
+   setOptimisticCartItems((prev) =>
+    prev.map((item) =>
+     item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
+    )
+   );
+
+   const updatedItem = await decreaseProductQuantityInCart(itemId);
 
    if ("errors" in updatedItem) {
     return;
@@ -84,6 +111,7 @@ function CartStatusIcon({ cartItems }: CartStatusIconProps) {
           key={index}
           item={item}
           onIncreaseQuantity={handleIncreaseQuantity}
+          onDecreaseQuantity={handleDecreaseQuantity}
          />
         ))}
        </ul>

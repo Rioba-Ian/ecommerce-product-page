@@ -79,3 +79,32 @@ export const increaseProductQuantityInCart = async (cartItemId: string) => {
 
  return cartItem;
 };
+
+export const decreaseProductQuantityInCart = async (cartItemId: string) => {
+ console.log("decreaseProductQuantityInCart", cartItemId);
+
+ if (!cartItemId) {
+  return {
+   errors: "Missing required data.",
+  };
+ }
+
+ const cartItem = await prisma.cartItem.findUnique({
+  where: { id: cartItemId },
+ });
+
+ if (cartItem?.quantity === 1) {
+  return prisma.cartItem.delete({
+   where: { id: cartItemId },
+  });
+ }
+
+ return prisma.cartItem.update({
+  where: { id: cartItemId },
+  data: {
+   quantity: {
+    decrement: 1,
+   },
+  },
+ });
+};

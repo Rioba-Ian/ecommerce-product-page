@@ -13,9 +13,14 @@ export default CartContent;
 interface CartItemProps {
  item: TCartWithProductsIncludes;
  onIncreaseQuantity: (itemId: string) => void;
+ onDecreaseQuantity: (itemId: string) => void;
 }
 
-export function CartItem({ item, onIncreaseQuantity }: CartItemProps) {
+export function CartItem({
+ item,
+ onIncreaseQuantity,
+ onDecreaseQuantity,
+}: CartItemProps) {
  //  const quantityLimitReached = !!item.product && item.quantity;
  //  TODO: handle quantity addition, removal and limit
 
@@ -37,7 +42,12 @@ export function CartItem({ item, onIncreaseQuantity }: CartItemProps) {
     <p className="font-medium">{item.product.name}</p>
     <p className="text-gray-400">{formatPrice(item.product.price)}</p>
     <div className="flex items-center gap-1.5">
-     <Button variant="outline" size="sm" disabled={item.quantity === 1}>
+     <Button
+      variant="outline"
+      size="sm"
+      disabled={item.quantity === 1}
+      onClick={() => onDecreaseQuantity(item.id)}
+     >
       -
      </Button>
      <span>{item.quantity}</span>
