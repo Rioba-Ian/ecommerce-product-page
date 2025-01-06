@@ -21,8 +21,8 @@ export function CartItem({
  onIncreaseQuantity,
  onDecreaseQuantity,
 }: CartItemProps) {
- //  const quantityLimitReached = !!item.product && item.quantity;
- //  TODO: handle quantity addition, removal and limit
+ const quantityLimitReached =
+  !!item.product && item.quantity && item.quantity >= item.product.in_stock;
 
  console.log(formatPrice(item.product.price), "item.product.price");
 
@@ -54,6 +54,7 @@ export function CartItem({
      <Button
       variant="outline"
       size="sm"
+      disabled={quantityLimitReached || false}
       onClick={() => onIncreaseQuantity(item.id)}
      >
       +
