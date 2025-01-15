@@ -94,9 +94,11 @@ function CartStatusIcon({ cartItems }: CartStatusIconProps) {
        width={24}
        height={24}
       />
-      <p className="absolute bg-primaryEcommerce text-white px-2 py-0.5 text-sm rounded-md  -top-3 left-4 font-bold">
-       {count > 0 ? count : ""}
-      </p>
+      {count > 0 && (
+       <p className="absolute bg-primaryEcommerce text-white px-2 py-0.5 text-sm rounded-md  -top-3 left-4 font-bold">
+        {count}
+       </p>
+      )}
      </div>
     </DrawerTrigger>
     <DrawerContent className="  left-auto  right-4 top-2 bottom-2 fixed z-50  outline-none w-[30%] flex  bg-transparent border-none mt-0 ">

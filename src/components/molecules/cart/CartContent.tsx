@@ -27,18 +27,18 @@ export function CartItem({
  console.log(formatPrice(item.product.price), "item.product.price");
 
  return (
-  <li key={item.id} className="flex items-center gap-2">
+  <li key={item.id} className="flex items-center gap-4 md:gap-8">
    <div>
     <Image
      src={item.product.image[0] ?? "/images/image-product-1.jpg"}
      alt="product image"
-     width={80}
-     height={80}
+     width={120}
+     height={120}
      className="rounded-md border border-primaryEcommerce"
     />
    </div>
 
-   <div>
+   <div className="space-y-2">
     <p className="font-medium">{item.product.name}</p>
     <p className="text-gray-400">{formatPrice(item.product.price)}</p>
     <div className="flex items-center gap-1.5">

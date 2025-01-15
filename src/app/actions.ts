@@ -4,6 +4,8 @@ import { getUser } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { Product } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { TCartItemWithProducts } from "../../global-types";
+import { stripe } from "@/lib/stripe";
 
 export async function addToCart(
  product: Product,
@@ -108,3 +110,33 @@ export const decreaseProductQuantityInCart = async (cartItemId: string) => {
   },
  });
 };
+
+export async function createCheckoutSession(cartItems: TCartItemWithProducts) {
+ console.log(JSON.stringify(cartItems, null, 2), "cartItems>>>>>");
+ console.log(cartItems.cartItems, "cartItems>>>>>");
+ console.log(Object.keys(cartItems.cartItems), "cartItems>>>>>");
+
+ const lineItems = cartItems.cartItems.map((item) => ({
+  price_data: {
+   currency: "usd",
+   product_data: {
+    name: item.product.name,
+    description: item.product.description || "",
+    images: item.product.image,
+   },
+   unit_amount: item.product.price * 100,
+  },
+  quantity: item.quantity,
+ }));
+
+ console.log(lineItems, "lineItems");
+
+ const session = await stripe.checkout.sessions.create({
+  line_items: lineItems,
+  mode: "payment",
+  success_url: `${process.env.NEXT_PUBLIC_URL}/checkout/success`,
+  cancel_url: `${process.env.NEXT_PUBLIC_URL}/checkout/cancel`,
+ });
+
+ return session;
+}

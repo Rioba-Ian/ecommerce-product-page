@@ -1,3 +1,5 @@
+import { sendCompletedOrderStatusEmail } from "@/lib/email";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -23,6 +25,35 @@ const handleCompletedCheckoutSession = async (
   if (!lineItems) return false;
 
   console.log(lineItems, "lineItems");
+
+  console.log(JSON.stringify(sessionWithLineItems, null, 2));
+
+  if (!sessionWithLineItems.customer_details?.email) return false;
+
+  const emailsent = await sendCompletedOrderStatusEmail(
+   sessionWithLineItems.customer_details?.email ?? "",
+   30
+  );
+
+  console.log(emailsent.message, "emailsent");
+
+  const user = await prisma.user.findUnique({
+   where: {
+    email: sessionWithLineItems.customer_details?.email,
+   },
+  });
+
+  if (!user) return false;
+
+  console.log("user with email::", user.email, "found");
+
+  await prisma.cart.deleteMany({
+   where: {
+    userId: user.id,
+   },
+  });
+
+  console.log("cart deleted");
  } catch (err) {
   console.error(err);
  }
@@ -39,7 +70,12 @@ export async function POST(req: NextRequest) {
   event = stripe.webhooks.constructEvent(rawBody, signature!, endpointSecret!);
  } catch (err: unknown) {
   console.error("Error processing webhook:", err);
-  return NextResponse.json({ error: err?.message }, { status: 400 });
+
+  if (err instanceof Error) {
+   console.error(err.message);
+   return NextResponse.json({ error: err.message }, { status: 400 });
+  }
+  return NextResponse.json({ error: err }, { status: 400 });
  }
 
  switch (event.type) {

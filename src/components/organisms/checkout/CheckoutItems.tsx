@@ -65,8 +65,9 @@ export default function CheckoutItems({
    );
   });
  };
+
  return (
-  <div className="col-span-2 flex flex-col border border-indigo-600 items-start gap-8">
+  <div className="col-span-2 flex flex-col items-start gap-8 md:gap-16">
    <ul>
     {optimisticCartItems.map((item, index) => (
      <CartItem
